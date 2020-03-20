@@ -194,4 +194,25 @@ def requires_auth(permission=''):
         return wrapper
     return requires_auth_decorator
 
+ 
 
+'''
+@Done implement endpoint
+    GET /drinks-detail
+        it should require the 'get:drinks-detail' permission
+        it should contain the drink.long() data representation
+    returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
+        or appropriate status code indicating reason for failure
+    NOTE: this is an example for another app, I just add it to show how to use requires_auth with permission
+''' 
+@app.route('/drinks-detail')
+@requires_auth(permission='get:drinks-detail')#require the 'get:drinks-detail' permission
+def get_drinks_detail(payload):
+    drinks_query = Drink.query.all()  
+    drinks = list(map(Drink.long, drinks_query))
+    if drinks is None or len(drinks)==0: 
+        abort(404)                 
+    return jsonify({
+        'success': True,
+        'drinks':drinks 
+    }) 
