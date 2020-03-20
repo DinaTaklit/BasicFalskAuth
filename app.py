@@ -134,3 +134,11 @@ def requires_auth(f):
         return f(payload, *args, **kwargs)
 
     return wrapper
+
+
+# Example of use of the method require auth
+@app.route('/headers')
+@requires_auth
+def headers(payload):
+    print(payload)
+    return 'Access Granted'
