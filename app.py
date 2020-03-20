@@ -120,3 +120,17 @@ def verify_decode_jwt(token):
                 'code': 'invalid_header',
                 'description': 'Unable to find the appropriate key.'
             }, 400)
+    
+    
+# Implement require auth function    
+def requires_auth(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        token = get_token_auth_header()
+        try:
+            payload = verify_decode_jwt(token)
+        except:
+            abort(401)
+        return f(payload, *args, **kwargs)
+
+    return wrapper
